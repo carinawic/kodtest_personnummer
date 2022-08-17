@@ -86,21 +86,11 @@ public class IDNumber implements Number {
             }
         }
         int luhns = (10 - (numsum % 10)) % 10; // this is the calculated luhns number
+        //System.out.println("NUMMM" + luhns);
         int lastDigitAsInt = Character.getNumericValue(lastDigit);
-
         return lastDigitAsInt == luhns;
     }
 
-    public String getBirthYear(){
-        String numberOnly = idNumber.replaceAll("[^0-9]", "");
-        String year = ""; // max 12
-        if (numberOnly.length() == 12){
-            year = numberOnly.substring(2, 4);
-        } else if (numberOnly.length() == 10){
-            year = numberOnly.substring(0, 2);
-        }
-        return year;
-    }
 
     public String getBirthMonth(){
         String numberOnly = idNumber.replaceAll("[^0-9]", "");

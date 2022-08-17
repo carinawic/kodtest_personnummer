@@ -3,20 +3,25 @@
  */
 package Kodprov;
 
-
-
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
+import static org.junit.Assert.*;
 
 public class AppTest {
+
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private PrintStream printStream = new PrintStream(outContent);
+
+    @BeforeEach
+    void before() {
+        System.setOut(printStream);
+    }
+
     @Test
     public void validSocialSecurityNumbersPass() {
-
         ArrayList<String> validNumbers = new ArrayList<>();
         validNumbers.add("141206-2380");
         validNumbers.add("20080903-2386");
@@ -35,9 +40,10 @@ public class AppTest {
             SocialSecurityNumber socialSecurityNumber = new SocialSecurityNumber(num);
             assertTrue(socialSecurityNumber.validate());
         }
-
     }
-    @Test public void invalidSocialSecurityNumbersDoNotPass() {
+
+    @Test
+    public void invalidSocialSecurityNumberFails() {
         ArrayList<String> invalidNumbers = new ArrayList<>();
         invalidNumbers.add("201701272394");
         invalidNumbers.add("190302299813");
@@ -48,12 +54,95 @@ public class AppTest {
         }
     }
 
-    /*
     @Test
-    void test(CapturedOutput output) {
-        System.out.println("oka");
-        assertTrue(output.getOut().contains("okasdasasd"));
-        //System.err.println("error");
-    } */
+    public void incorrectlyFormattedSocialSecurityNumberFailsWithLog() {
+        ArrayList<String> invalidNumbers = new ArrayList<>();
+        invalidNumbers.add("9810");
+        invalidNumbers.add("190302++299813");
+        invalidNumbers.add("");
+        invalidNumbers.add("199810013509555");
+        invalidNumbers.add("981001-3509-");
+        invalidNumbers.add("abc");
 
+        for(String num : invalidNumbers){
+            SocialSecurityNumber socialSecurityNumber = new SocialSecurityNumber(num);
+            assertFalse(socialSecurityNumber.validate());
+
+            String a = (outContent.toString());
+            String b = ("fail: does not have correct formatting\n");
+            assertEquals(a,b);
+            outContent.reset();
+        }
+    }
+
+    @Test
+    public void invalidLuhnsSocialSecurityNumberFailsWithLog() {
+        SocialSecurityNumber socialSecurityNumber = new SocialSecurityNumber("9810013508");
+        assertFalse(socialSecurityNumber.validate());
+
+        String a = (outContent.toString());
+        String b = ("fail: Luhns number is not valid\n");
+        assertEquals(a,b);
+    }
+
+    @Test
+    public void invalidDateSocialSecurityNumberFailsWithLog() {
+        SocialSecurityNumber socialSecurityNumber = new SocialSecurityNumber("9802313503");
+        assertFalse(socialSecurityNumber.validate());
+
+        String a = (outContent.toString());
+        String b = ("fail: date does not exist\n");
+        assertEquals(a,b);
+    }
+
+    @Test
+    public void validCoordinationNumbersPass() {
+        CoordinationNumber coordinationNumber = new CoordinationNumber("190910799824");
+        assertTrue(coordinationNumber.validate());
+    }
+
+    @Test
+    public void tooLowBirthdayCoordinationNumberFailWithLog() {
+        CoordinationNumber coordinationNumber = new CoordinationNumber("199810013509");
+        assertFalse(coordinationNumber.validate());
+
+        String a = (outContent.toString());
+        String b = ("fail: date does not exist\n");
+        assertEquals(a,b);
+    }
+
+    @Test
+    public void validOrganisationNumberPass() {
+        ArrayList<String> validNumbers = new ArrayList<>();
+        validNumbers.add("556614-3185");
+        validNumbers.add("16556601-6399");
+        validNumbers.add("262000-1111");
+        validNumbers.add("857202-7566");
+
+        for(String num : validNumbers){
+            OrganisationNumber organisationNumber = new OrganisationNumber(num);
+            assertTrue(organisationNumber.validate());
+        }
+    }
+
+    @Test
+    public void not16YearOrganisationNumberFailWithLog() {
+
+        OrganisationNumber organisationNumber = new OrganisationNumber("15216614-3186");
+        assertFalse(organisationNumber.validate());
+
+        String a = (outContent.toString());
+        String b = ("fail: year does not start with 16\n");
+        assertEquals(a,b);
+    }
+
+    @Test
+    public void below20MonthOrganisationNumberFailWithLog() {
+        OrganisationNumber organisationNumber = new OrganisationNumber("211914-3184");
+        assertFalse(organisationNumber.validate());
+
+        String a = (outContent.toString());
+        String b = ("fail: middle number is less than 20\n");
+        assertEquals(a,b);
+    }
 }

@@ -15,7 +15,4 @@ public class CoordinationNumber extends SocialSecurityNumber{
 
         return String.valueOf(realBirthDay);
     }
-
-
-
 }
