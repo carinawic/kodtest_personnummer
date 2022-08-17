@@ -1,6 +1,6 @@
 package Kodprov;
 
-public class OrganisationNumber extends IDNumber{
+public class OrganisationNumber extends Number {
 
     public OrganisationNumber(String idNumber) {
         super(idNumber);
@@ -24,7 +24,6 @@ public class OrganisationNumber extends IDNumber{
             System.out.println("fail: year does not start with 16");
             return false;
         }
-
         return true;
     }
 

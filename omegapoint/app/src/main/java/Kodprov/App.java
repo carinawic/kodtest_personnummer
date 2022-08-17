@@ -1,7 +1,5 @@
 package Kodprov;
 
-//import main.java.Kodprov.Personnummer;
-
 import java.util.Scanner;
 
 public class App {
@@ -9,7 +7,6 @@ public class App {
     public static void main(String[] args) {
 
         Scanner input = new Scanner(System.in);
-
         boolean execute;
 
         do{
@@ -42,8 +39,6 @@ public class App {
                 execute = false;
             }
         }while(execute);
-
         input.close();
-
     }
 }
