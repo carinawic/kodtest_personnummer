@@ -33,12 +33,8 @@ public class Number {
         final List<Pattern> rxs = new ArrayList<>();
 
         // possible formats
-        rxs.add(Pattern.compile("[0-9]{10,12}")); // 9810013509
-        // rxs.add(Pattern.compile("[0-9]{12}")); // 199810013509
-        rxs.add(Pattern.compile("[0-9]{6,8}-[0-9]{4}")); // 981001-3509
-        //rxs.add(Pattern.compile("[0-9]{10}-[0-9]{4}")); // 19981001-3509
-        // assume it is not allowed to use a "+" with 12 digits
-
+        rxs.add(Pattern.compile("[0-9]{10,12}")); // 9810013509 or 199810013509
+        rxs.add(Pattern.compile("[0-9]{6,8}-[0-9]{4}")); // 981001-3509 or 19981001-3509
 
         for (Pattern rx : rxs) if (rx.matcher(idNumber).matches()) return true;
         return false;
@@ -78,8 +74,7 @@ public class Number {
                 numsum += asDigit;
             }
         }
-        int luhns = (10 - (numsum % 10)) % 10; // this is the calculated luhns number
-        //System.out.println("NUMMM" + luhns);
+        int luhns = (10 - (numsum % 10)) % 10; 
         int lastDigitAsInt = Character.getNumericValue(lastDigit);
         return lastDigitAsInt == luhns;
     }

@@ -22,8 +22,8 @@ public class SocialSecurityNumber extends Number {
 
     public boolean hasCorrectDigitFormatting(){
         // possible formats
-        Pattern pattern = Pattern.compile("[0-9]{6,8}\\+[0-9]{4}"); // 981001+3509
-        // return true if we match either the overall ID formats or the human formats
+        Pattern pattern = Pattern.compile("[0-9]{6}\\+[0-9]{4}"); // 981001+3509
+        // return true if we match either the overall ID formats or the human format
         return super.hasCorrectDigitFormatting() || pattern.matcher(idNumber).matches();
     }
 
